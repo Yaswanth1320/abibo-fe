@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import BestDeals from "../components/BestDeals";
+import BestSellers from "../components/BestSellers";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -380,6 +381,10 @@ const HomeScreen = () => {
           <View>
             <BestDeals />
           </View>
+          <View>
+            <BestSellers />
+          </View>
+          
         </ScrollView>
       </View>
     </SafeAreaView>

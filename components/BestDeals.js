@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     height: 250, // adjust it to your needs
     backgroundColor: "rgba(251, 198, 205, 0.3)",
     overflow: "hidden", // Clip to the rounded shape
-    marginTop: 20, // Spacing
+    marginTop: 15, // Spacing
     marginHorizontal: 20, // Margin
     borderRadius: 10,
     padding: 20,
