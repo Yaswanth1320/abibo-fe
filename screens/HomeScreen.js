@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  ScrollView,
   TouchableOpacity,
   FlatList,
   SafeAreaView,
@@ -15,17 +14,25 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
 import BestDeals from "../components/BestDeals";
 import BestSellers from "../components/BestSellers";
 
 const { width: screenWidth } = Dimensions.get("window");
 
-const HomeScreenHeader = ({ menuOpen, setMenuOpen }) => {
+const HomeScreenHeader = ({
+  menuOpen,
+  setMenuOpen,
+  showSearch,
+  setShowSearch,
+}) => {
   const navigation = useNavigation();
 
   const handleMenuPress = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleSearchPress = () => {
+    setShowSearch(true);
   };
 
   return (
@@ -58,21 +65,65 @@ const HomeScreenHeader = ({ menuOpen, setMenuOpen }) => {
         </View>
       </View>
 
-      <View style={styles.searchContainer}>
+      <TouchableOpacity
+        style={styles.searchContainer}
+        onPress={handleSearchPress}
+        activeOpacity={1}
+      >
         <Ionicons
           name="search-outline"
           size={22}
           color="#888"
           style={styles.searchIcon}
         />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search here"
-          placeholderTextColor="#aaa"
-        />
-        <TouchableOpacity>
-          <Ionicons name="mic-outline" size={26} color="#333" />
+        <Text style={styles.searchPlaceholder}>Search here</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const SearchScreenHeader = ({
+  setShowSearch,
+  searchText,
+  setSearchText,
+  setFilteredProducts,
+}) => {
+  const navigation = useNavigation();
+
+  const handleBackPress = () => {
+    setShowSearch(false);
+    setSearchText("");
+    setFilteredProducts([]);
+  };
+
+  const handleSearchChange = (text) => {
+    setSearchText(text);
+  };
+
+  return (
+    <View style={styles.header}>
+      <View style={styles.searchHeaderContainer}>
+        <TouchableOpacity onPress={handleBackPress}>
+          <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
+        <View style={styles.searchContainer}>
+          <Ionicons
+            name="search-outline"
+            size={22}
+            color="#888"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search here"
+            placeholderTextColor="#aaa"
+            value={searchText}
+            onChangeText={handleSearchChange}
+          />
+          <TouchableOpacity>
+            <Ionicons name="mic-outline" size={26} color="#333" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -83,15 +134,69 @@ const HomeScreen = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [menuOpen, setMenuOpen] = useState(false);
   const translateX = useRef(new Animated.Value(-screenWidth * 0.7)).current;
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  const products = [
+    {
+      id: "1",
+      name: "Chasadim Flour",
+      brand: "Chasadim",
+      description: "Unbleached All-Purpose Flour",
+      image: require("../assets/cupcakes.jpg"),
+      rating: 4.9,
+    },
+    {
+      id: "2",
+      name: "JALPU Gor-Papdi Flour",
+      brand: "JALPU",
+      description: "Coarse Wheat Flour",
+      image: require("../assets/cookies.jpeg"),
+      rating: 4.8,
+    },
+    {
+      id: "3",
+      name: "SMG Guetiane Farine",
+      brand: "SMG Guetiane",
+      description: "Farine de blé tendre",
+      image: require("../assets/pan.webp"),
+      rating: 4.1,
+    },
+    {
+      id: "4",
+      name: "Star Flour",
+      brand: "Star",
+      description: "The Tasty Way... For Healthy Life...",
+      image: require("../assets/dough.jpg"),
+      rating: 4.5,
+    },
+  ];
 
   useEffect(() => {
     Animated.timing(translateX, {
       toValue: menuOpen ? 0 : -screenWidth * 0.7,
       duration: 300,
-      easing: Easing.linear, // simple animation
-      useNativeDriver: true, // performance of the system
+      easing: Easing.linear,
+      useNativeDriver: true,
     }).start();
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (searchText.trim() === "") {
+      setFilteredProducts([]);
+      return;
+    }
+
+    const results = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchText.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    setFilteredProducts(results);
+  }, [searchText]);
 
   const categories = [
     { id: "1", title: "Flours", image: require("../assets/flour.webp") },
@@ -292,100 +397,158 @@ const HomeScreen = () => {
     );
   };
 
+  const renderProductItem = (item) => (
+    <View style={styles.productItem}>
+      <View style={styles.productImageContainer}>
+        <Image
+          source={item.image}
+          style={styles.productImage}
+          resizeMode="cover"
+        />
+        {item.rating && (
+          <View style={styles.ratingBadge}>
+            <Ionicons name="star" size={12} color="white" />
+            <Text style={styles.ratingText}>{item.rating}</Text>
+          </View>
+        )}
+      </View>
+      <View style={styles.productDetails}>
+        <Text style={styles.productName}>{item.name || "Product Name"}</Text>
+        <Text style={styles.productBrand}>{item.brand || "Brand Name"}</Text>
+        <Text style={styles.productDescription}>
+          {item.description || "Product Description"}
+        </Text>
+
+        <View style={styles.productActions}>
+          <TouchableOpacity style={styles.buyNowButton}>
+            <Text style={styles.buyNowText}>Buy Now</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.saveButton}>
+            <Text style={styles.saveText}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <HomeScreenHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-
-        <Animated.View
-          style={[
-            styles.menuContainer,
-            { transform: [{ translateX }] }, // Apply translateX animation
-          ]}
-        >
-          <View style={styles.menuTop}>
-            <Text style={styles.menuText}>Shop by Categories</Text>
-            <TouchableOpacity
-              onPress={() => setMenuOpen(false)}
-              style={styles.menuButton}
-            >
-              <Ionicons name="close" size={25} color="black" />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.catListContainer}>
-            <FlatList
-              data={categories}
-              renderItem={menuCategoryItem}
-              keyExtractor={(item) => item.id}
+        {showSearch ? (
+          <View style={{ flex: 1 }}>
+            <SearchScreenHeader
+              setShowSearch={setShowSearch}
+              searchText={searchText}
+              setSearchText={setSearchText}
+              setFilteredProducts={setFilteredProducts}
             />
+            <View style={styles.searchResultsContainer}>
+              {filteredProducts.map((item) => (
+                <React.Fragment key={item.id}>
+                  {renderProductItem(item)}
+                </React.Fragment>
+              ))}
+              {filteredProducts.length === 0 && (
+                <Text style={styles.noResultsText}>No results found.</Text>
+              )}
+            </View>
           </View>
-        </Animated.View>
-
-        <ScrollView style={styles.scrollContainer}>
-          <Text style={styles.sectionTitle}>Categories</Text>
+        ) : (
           <FlatList
-            data={categories}
-            renderItem={renderCategoryItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoriesContainer}
+            style={{ flex: 1 }}
+            ListHeaderComponent={
+              <View>
+                <HomeScreenHeader
+                  menuOpen={menuOpen}
+                  setMenuOpen={setMenuOpen}
+                  showSearch={showSearch}
+                  setShowSearch={setShowSearch}
+                />
+                <Animated.View
+                  style={[
+                    styles.menuContainer,
+                    { transform: [{ translateX }] },
+                  ]}
+                >
+                  <View style={styles.menuTop}>
+                    <Text style={styles.menuText}>Shop by Categories</Text>
+                    <TouchableOpacity
+                      onPress={() => setMenuOpen(false)}
+                      style={styles.menuButton}
+                    >
+                      <Ionicons name="close" size={25} color="black" />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.catListContainer}>
+                    <FlatList
+                      data={categories}
+                      renderItem={menuCategoryItem}
+                      keyExtractor={(item) => item.id}
+                    />
+                  </View>
+                </Animated.View>
+                <Text style={styles.sectionTitle}>Categories</Text>
+                <FlatList
+                  data={categories}
+                  renderItem={renderCategoryItem}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.categoriesContainer}
+                />
+
+                <Animated.FlatList
+                  ref={flatListRef}
+                  data={deals}
+                  renderItem={renderDealItem}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                    { useNativeDriver: false }
+                  )}
+                  scrollEventThrottle={16}
+                />
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Top Rated Products</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.viewAll}>View All</Text>
+                  </TouchableOpacity>
+                </View>
+                <FlatList
+                  data={topRatedProducts}
+                  renderItem={renderTopRatedItem}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.topRatedContainer}
+                />
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Top Brands</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.viewAll}>View All</Text>
+                  </TouchableOpacity>
+                </View>
+                {topBrands.map((item) => (
+                  <React.Fragment key={item.id}>
+                    {renderBrandItem({ item })}
+                  </React.Fragment>
+                ))}
+                <View>
+                  <BestDeals />
+                </View>
+                <View>
+                  <BestSellers />
+                </View>
+              </View>
+            }
+            data={[{key:'1'}]}
+            renderItem={()=><View></View>}
           />
-
-          <Animated.FlatList
-            ref={flatListRef}
-            data={deals}
-            renderItem={renderDealItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              { useNativeDriver: false }
-            )}
-            scrollEventThrottle={16}
-          />
-
-          {/* Top Rated Products */}
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Top Rated Products</Text>
-            <TouchableOpacity>
-              <Text style={styles.viewAll}>View All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={topRatedProducts}
-            renderItem={renderTopRatedItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.topRatedContainer}
-          />
-
-          {/* Top Brands */}
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Top Brands</Text>
-            <TouchableOpacity>
-              <Text style={styles.viewAll}>View All</Text>
-            </TouchableOpacity>
-          </View>
-          {topBrands.map((item) => (
-            <React.Fragment key={item.id}>
-              {renderBrandItem({ item })}
-            </React.Fragment>
-          ))}
-
-          <View>
-            <BestDeals />
-          </View>
-          <View>
-            <BestSellers />
-          </View>
-          
-        </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -401,12 +564,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   scrollContainer: {
-    flex: 1, // added
+    flex: 1,
   },
   header: {
     paddingTop: 15,
     paddingBottom: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     backgroundColor: "#fff",
   },
   wrapper: {
@@ -442,29 +605,32 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 182, 193, 0.3)",
   },
   searchContainer: {
+    display: "flex",
+    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
     borderRadius: 10,
-    paddingHorizontal: 10,
+    padding: 10,
     marginTop: 3,
   },
   searchIcon: {
     marginRight: 10,
   },
   searchInput: {
-    flex: 1,
-    height: 40,
+    height: 30,
+    width: "77%",
     fontSize: 16,
+    fontFamily: "Montserrat_400Regular",
   },
   menuContainer: {
     flexDirection: "column",
-    backgroundColor: "rgba(0,0,0,0.6)", // Black for the side menu
-    width: screenWidth * 0.7, // 70% of the screen width
-    height: "100%", // Fill the whole screen height
+    backgroundColor: "rgba(0,0,0,0.6)",
+    width: screenWidth * 0.7,
+    height: "100%",
     position: "absolute",
     top: 0,
-    left: 0, // Moved position to use absolute on the left 0
+    left: 0,
     zIndex: 2,
     padding: 5,
     borderTopRightRadius: 20,
@@ -783,6 +949,117 @@ const styles = StyleSheet.create({
   },
   catListContainer: {
     flex: 1,
+  },
+  searchPlaceholder: {
+    flex: 1,
+    fontSize: 16,
+    color: "#aaa",
+    fontFamily: "Montserrat_400Regular",
+  },
+  searchResultsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    padding: 10,
+  },
+  productItem: {
+    flexDirection: "column",
+    backgroundColor: "whitesmoke",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    width: screenWidth / 2 - 30,
+    marginHorizontal: 10,
+  },
+  productImageContainer: {
+    position: "relative",
+  },
+  productImage: {
+    width: "100%",
+    height: 150,
+  },
+  ratingBadge: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    backgroundColor: "crimson",
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  ratingText: {
+    fontFamily: "Montserrat_400Regular",
+    color: "white",
+    fontSize: 12,
+    marginLeft: 3,
+  },
+  productDetails: {
+    padding: 10,
+    fontFamily: "Montserrat_400Regular",
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 3,
+    fontFamily: "Montserrat_400Regular",
+  },
+  productBrand: {
+    fontSize: 12,
+    color: "#666",
+    marginBottom: 3,
+    fontFamily: "Montserrat_400Regular",
+  },
+  productDescription: {
+    fontSize: 11,
+    color: "#888",
+    marginBottom: 6,
+    height: 30,
+    overflow: "hidden",
+    fontFamily: "Montserrat_400Regular",
+  },
+  productActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 4,
+  },
+  buyNowButton: {
+    backgroundColor: "crimson",
+    paddingHorizontal:18,
+    paddingVertical: 12,
+    borderRadius: 5,
+  },
+  buyNowText: {
+    color: "white",
+    fontSize: 14,
+  },
+  saveButton: {
+    backgroundColor: "grey",
+    paddingHorizontal:20,
+    paddingVertical: 12,
+    borderRadius: 5,
+  },
+  saveText: {
+    color: "white",
+    fontSize: 14,
+  },
+  noResultsText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "#888",
+  },
+  searchHeaderContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
   },
 });
 
