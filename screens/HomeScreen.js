@@ -53,12 +53,15 @@ const HomeScreenHeader = ({
           <TouchableOpacity>
             <Ionicons name="heart-outline" size={24} color="crimson" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.notificationButton}>
+          <TouchableOpacity
+            style={styles.notificationButton}
+            onPress={() => navigation.navigate("Notification")}
+          >
             <Ionicons name="notifications-outline" size={22} color="crimson" />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.cartButton}
-            onPress={() => navigation.navigate("Orders")}
+            onPress={() => navigation.navigate("Cart")}
           >
             <Ionicons name="cart-outline" size={22} color="crimson" />
           </TouchableOpacity>
@@ -545,8 +548,8 @@ const HomeScreen = () => {
                 </View>
               </View>
             }
-            data={[{key:'1'}]}
-            renderItem={()=><View></View>}
+            data={[{ key: "1" }]}
+            renderItem={() => <View></View>}
           />
         )}
       </View>
@@ -1032,7 +1035,7 @@ const styles = StyleSheet.create({
   },
   buyNowButton: {
     backgroundColor: "crimson",
-    paddingHorizontal:18,
+    paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 5,
   },
@@ -1042,7 +1045,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: "grey",
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 5,
   },

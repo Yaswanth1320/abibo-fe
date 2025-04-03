@@ -8,6 +8,9 @@ import SignupScreen from "../screens/SignupScreen";
 import OtpLoginScreen from "../screens/OtpLoginScreen";
 import TabNavigator from "./TabNavigator"; // Import the TabNavigator
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import CartScreen from "../screens/CartScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import CheckoutScreen from "../screens/CheckoutScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +46,21 @@ const AppNavigator = () => {
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cart"
+          component={CartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Notification"
+          component={NotificationsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Checkout"
+          component={CheckoutScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -169,18 +169,21 @@ const OrdersScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity style={styles.invoiceButton}>
                 <Ionicons name="download" size={16} color="black" />
-                <Text> Invoice</Text>
+                <Text style={styles.invoiceButtonText}> Invoice</Text>
               </TouchableOpacity>
             </View>
             {order.status === "Delivered" ? (
               <TouchableOpacity style={styles.requestExchangeButton}>
                 <Ionicons name="repeat" size={16} color="black" />
-                <Text> Request Exchange</Text>
+                <Text style={styles.requestExchangeButtonText}>
+                  {" "}
+                  Request Exchange
+                </Text>
               </TouchableOpacity>
             ) : order.status === "Pending" ? (
               <TouchableOpacity style={styles.cancelOrderButton}>
                 <Ionicons name="close-circle" size={16} color="black" />
-                <Text> Cancel Order</Text>
+                <Text style={styles.cancelOrderButtonText}> Cancel Order</Text>
               </TouchableOpacity>
             ) : null}
           </View>
@@ -239,11 +242,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 20,
     height: 50,
+    fontFamily: "Montserrat_400Regular",
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginLeft: 10,
+    fontFamily: "Montserrat_400Regular",
   },
   searchContainer: {
     flexDirection: "row",
@@ -260,6 +265,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
+    fontFamily: "Montserrat_400Regular",
   },
   ordersListContainer: {
     paddingHorizontal: 20,
@@ -277,10 +283,13 @@ const styles = StyleSheet.create({
   orderId: {
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "Montserrat_400Regular",
+    marginBottom: 3,
   },
   orderDate: {
     fontSize: 14,
     color: "gray",
+    fontFamily: "Montserrat_400Regular",
   },
   itemImages: {
     flexDirection: "row",
@@ -298,13 +307,14 @@ const styles = StyleSheet.create({
     color: "gray",
     backgroundColor: "#e0e0e0",
     borderRadius: 5,
-    paddingHorizontal: 5,
+    padding: 5,
     marginLeft: 3,
   },
   paymentMethod: {
     fontSize: 13,
     color: "gray",
     marginTop: 5,
+    fontFamily: "Montserrat_400Regular",
   },
   rightSection: {
     alignItems: "flex-end",
@@ -315,11 +325,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 5,
+    fontFamily: "Montserrat_400Regular",
   },
   amount: {
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 5,
+    fontFamily: "Montserrat_400Regular",
   },
   filterButton: {
     position: "absolute",
@@ -350,7 +362,8 @@ const styles = StyleSheet.create({
   productsTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 6,
+    fontFamily: "Montserrat_400Regular",
   },
   productItem: {
     flexDirection: "row",
@@ -366,6 +379,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     flex: 1,
+    fontFamily: "Montserrat_400Regular",
   },
   productQuantity: {
     fontSize: 12,
@@ -374,6 +388,7 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 14,
     fontWeight: "bold",
+    fontFamily: "Montserrat_400Regular",
   },
   deliveryInfoContainer: {
     marginTop: 10,
@@ -385,26 +400,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 5,
+    fontFamily: "Montserrat_400Regular",
   },
   actionButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
+    gap: 5,
   },
   reorderButton: {
+    flex: 1,
     backgroundColor: "#e91e63",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     color: "white",
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 5,
   },
   reorderButtonText: {
     color: "white",
+    fontFamily: "Montserrat_400Regular",
   },
   invoiceButton: {
+    flex: 1,
     backgroundColor: "#ddd",
     flexDirection: "row",
     alignItems: "center",
@@ -412,6 +432,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 5,
+  },
+  invoiceButtonText: {
+    fontFamily: "Montserrat_400Regular",
   },
   requestExchangeButton: {
     marginTop: 10,
@@ -425,6 +448,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
   },
+  requestExchangeButtonText: {
+    fontFamily: "Montserrat_400Regular",
+  },
   cancelOrderButton: {
     marginTop: 10,
     backgroundColor: "#fff",
@@ -436,6 +462,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#ddd",
+  },
+  cancelOrderButtonText: {
+    fontFamily: "Montserrat_400Regular",
   },
   expandedOrderDetails: {
     borderBottomLeftRadius: 0, // Remove bottom-left radius when expanded
