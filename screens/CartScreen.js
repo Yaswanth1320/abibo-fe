@@ -82,8 +82,7 @@ const CartScreen = () => {
 
   const handleProceedToBuy = () => {
     console.log("Proceeding to checkout");
-    // Navigate to CheckoutScreen and pass the total
-    navigation.navigate("Checkout", { totalAmount: total });
+    navigation.navigate("DeliveryDetails", { totalAmount: total }); 
   };
 
   const handleBackPress = () => {

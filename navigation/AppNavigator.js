@@ -11,6 +11,7 @@ import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import CartScreen from "../screens/CartScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
+import DeliveryDetailsScreen from "../screens/DeliveryDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Checkout"
           component={CheckoutScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DeliveryDetails"
+          component={DeliveryDetailsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

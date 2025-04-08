@@ -100,6 +100,7 @@ const CheckoutScreen = () => {
           <Ionicons name="arrow-back" size={20} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Checkout</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       <ScrollView
@@ -263,15 +264,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: 12,
+    paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
-    backgroundColor: "#FFFFFF",
-    gap: 4,
+    borderBottomColor: "#ddd",
+    justifyContent: "space-between",
   },
   backButton: {
     padding: 5,
