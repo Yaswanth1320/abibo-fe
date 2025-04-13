@@ -7,16 +7,18 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
-  Image, // Make sure Image is imported
+  Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-// Placeholder for text-based icons - you might replace these later
 const Icon = ({ name, style }) => (
   <Text style={[styles.iconPlaceholder, style]}>{name}</Text>
 );
 
 const MyProfileScreen = () => {
+  const navigation = useNavigation();
   const legalLinks = [
     "ABOUT US",
     "TERMS OF USE",
@@ -26,15 +28,22 @@ const MyProfileScreen = () => {
     "REFUND POLICY",
   ];
 
+  const goToEditProfile = () => navigation.navigate("EditProfile");
+  const goToManageAddresses = () => navigation.navigate("ManageAddresses");
+  const goToPaymentMethods = () => navigation.navigate("PaymentMethods");
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor={styles.header.backgroundColor} // Use the actual color value here if needed directly
+        backgroundColor={styles.header.backgroundColor}
       />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Icon name="←" style={styles.backIcon} />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My Profile</Text>
         <View style={styles.headerRightPlaceholder} />
@@ -44,18 +53,19 @@ const MyProfileScreen = () => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
       >
-        <TouchableOpacity style={styles.card}>
+        {/* Profile Card - Navigate to EditProfile */}
+        <TouchableOpacity style={styles.card} onPress={goToEditProfile}>
           <View style={styles.profileInfoContainer}>
             <View style={styles.avatarContainer}>
               <View style={styles.avatar}>
                 <Image
-                  source={require("../assets/profile.png")}
+                  source={require("../assets/profile.png")} // Ensure this path is correct
                   style={styles.logo}
                   resizeMode="cover"
                 />
               </View>
               <View style={styles.cameraIconContainer}>
-                <Icon name="📷" style={styles.cameraIcon} />
+                <Ionicons name="camera-outline" size={12} color="#e91e63" />
               </View>
             </View>
             <View style={styles.profileTextContainer}>
@@ -73,61 +83,59 @@ const MyProfileScreen = () => {
 
         <View style={[styles.card, styles.actionsCard]}>
           <View style={styles.actionsRow}>
-            <TouchableOpacity style={styles.actionButton}>
-              {/* My Account Icon */}
+            {/* My Account Button - Navigate to EditProfile */}
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToEditProfile}
+            >
               <MaterialIcons
-                name="person-outline" // Choose an appropriate icon name
-                size={26} // Standard size
-                color="#777" // Your desired color
-                style={styles.materialIconStyle} // Apply common margin style
+                name="person-outline"
+                size={26}
+                color="#777"
+                style={styles.materialIconStyle}
               />
               <Text style={styles.actionText}>My Account</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              {/* Addresses Icon */}
+            {/* Addresses Button - Navigate to ManageAddresses */}
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToManageAddresses}
+            >
               <MaterialIcons
-                name="location-pin" // Or "place"
+                name="location-pin"
                 size={26}
-                color="#D32F2F" // Your desired color (reddish)
+                color="#e91e63" // Use consistent pink
                 style={styles.materialIconStyle}
               />
               <Text style={styles.actionText}>Addresses</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.actionsRow}>
-            <TouchableOpacity style={styles.actionButton}>
-              {/* Payments Icon */}
+            {/* Payments Button - Navigate to PaymentMethods */}
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToPaymentMethods}
+            >
               <MaterialIcons
                 name="credit-card"
                 size={26}
-                color="#1976D2" // Your desired color (blueish)
+                color="#1976D2"
                 style={styles.materialIconStyle}
               />
               <Text style={styles.actionText}>Payments</Text>
             </TouchableOpacity>
+            {/* Help & Support Button - Add navigation if needed */}
             <TouchableOpacity style={styles.actionButton}>
-              {/* Rewards Icon */}
               <MaterialIcons
-                name="monetization-on" // Or "star-outline", "card-giftcard", "emoji-events"
-                size={26}
-                color="#FFB300" // Your desired color (gold/yellow)
+                name="help-outline"
+                size={20}
+                color="#555"
                 style={styles.materialIconStyle}
               />
-              <Text style={styles.actionText}>Rewards</Text>
+              <Text style={styles.actionText}>Help & Support</Text>
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Help & Support Section */}
-        <TouchableOpacity style={[styles.card, styles.helpSupportCard]}>
-          <MaterialIcons
-            name="help-outline"
-            size={20}
-            color="#555"
-            style={styles.helpIcon}
-          />
-          <Text style={styles.helpSupportText}>Help & Support</Text>
-        </TouchableOpacity>
 
         {/* Legal Links Section */}
         <View style={styles.card}>
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 18,
     marginVertical: 8,
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 18,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -374,7 +382,7 @@ const styles = StyleSheet.create({
   },
   logoutIcon: {
     fontSize: 18,
-    marginBottom: 0, // Override iconPlaceholder margin if needed
+    marginBottom: 0,
   },
 });
 
