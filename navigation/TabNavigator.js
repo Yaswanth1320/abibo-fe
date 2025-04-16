@@ -14,7 +14,14 @@ const getTabBarVisibility = (route) => {
   // Get the name of the route focused within the nested stack navigator
   // Provide a default name ('MyProfile' in this case) if the stack hasn't loaded yet
   const routeName = getFocusedRouteNameFromRoute(route) ?? "MyProfile";
-  const hideOnScreens = ["EditProfile", "ManageAddresses", "PaymentMethods"];
+  const hideOnScreens = [
+    "EditProfile",
+    "ManageAddresses",
+    "PaymentMethods",
+    "ChangePassword",
+    "AddNewAddress",
+    "AddNewPaymentMethod",
+  ];
   if (hideOnScreens.includes(routeName)) {
     return "none";
   }
@@ -48,6 +55,9 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "gray",
         headerShown: false,
         tabBarStyle: { display: getTabBarVisibility(route) },
+        tabBarLabelStyle: {
+          fontFamily: "Montserrat_400Regular",
+        },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />

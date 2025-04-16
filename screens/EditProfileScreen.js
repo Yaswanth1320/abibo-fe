@@ -10,7 +10,6 @@ import {
   SafeAreaView,
   StatusBar,
   Modal,
-  Button,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,8 +19,6 @@ import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 const EditProfileScreen = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState("Primary");
-
-  // --- State for Form Data ---
   const [fullName, setFullName] = useState("Banana Bakery");
   const [email, setEmail] = useState("bananabakery@gmail.com");
   const [phone, setPhone] = useState("+91 8787878743");
@@ -32,6 +29,10 @@ const EditProfileScreen = () => {
   const [avatarSource, setAvatarSource] = useState(null);
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [tempAccountType, setTempAccountType] = useState(accountType);
+
+  // New states for delete account confirmation and success modal
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showDeletionSuccess, setShowDeletionSuccess] = useState(false);
 
   const handleSaveChanges = () => {
     console.log("Saving changes:", {
@@ -93,6 +94,33 @@ const EditProfileScreen = () => {
     setIsPickerVisible(false);
   };
 
+  const handleDeleteAccount = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleUpdatePassword = () => {
+    navigation.navigate("ChangePassword");
+  };
+
+  const confirmDeleteAccount = () => {
+    // In real app, this is where you'd make an API call to delete the account
+    console.log("Account deletion confirmed!");
+
+    // Simulate successful deletion
+    setShowDeleteConfirmation(false);
+    setShowDeletionSuccess(true);
+
+    // Simulate some delay before navigating (to show the success message)
+    setTimeout(() => {
+      setShowDeletionSuccess(false);
+      navigation.navigate("Login"); // Redirect to login page (replace "Login" with your login screen name)
+    }, 2000);
+  };
+
+  const cancelDeleteAccount = () => {
+    setShowDeleteConfirmation(false);
+  };
+
   const renderPrimaryInfo = () => (
     <View style={styles.form}>
       <Text style={styles.label}>Full Name</Text>
@@ -140,12 +168,12 @@ const EditProfileScreen = () => {
 
   const renderOtherInfo = () => (
     <View style={styles.tabContent}>
-      <Text style={styles.label}>Company Name (Optional)</Text>
-      <TextInput style={styles.input} placeholder="Your Company" />
-      <Text style={styles.label}>Website (Optional)</Text>
+      <Text style={styles.label}>GST Number</Text>
+      <TextInput style={styles.input} placeholder="Enter the GST number" />
+      <Text style={styles.label}>Account Type</Text>
       <TextInput
         style={styles.input}
-        placeholder="https://example.com"
+        placeholder="ex: Business, Personal"
         keyboardType="url"
       />
     </View>
@@ -153,18 +181,30 @@ const EditProfileScreen = () => {
 
   const renderSettings = () => (
     <View style={styles.tabContent}>
-      <TouchableOpacity style={styles.settingItem}>
-        <Text style={styles.settingItemText}>Notification Preferences</Text>
+      <TouchableOpacity
+        style={styles.settingItem}
+        onPress={handleUpdatePassword}
+      >
+        <Text style={styles.settingItemText}>Update Password</Text>
         <Ionicons name="chevron-forward" size={20} color="gray" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.settingItem}>
-        <Text style={styles.settingItemText}>Change Password</Text>
-        <Ionicons name="chevron-forward" size={20} color="gray" />
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.settingItem, { borderBottomWidth: 0 }]}>
-        <Text style={[styles.settingItemText, { color: "red" }]}>
-          Delete Account
-        </Text>
+      <TouchableOpacity
+        style={[styles.settingItem, { borderBottomWidth: 0 }]}
+        onPress={handleDeleteAccount} // Call handleDeleteAccount when the item is pressed
+      >
+        <View style={styles.deleteAccount}>
+          <Text
+            style={[styles.settingItemText, { color: "red", fontSize: 18 }]}
+          >
+            Delete My Account
+          </Text>
+          <Text
+            style={[styles.settingItemText, { color: "gray", fontSize: 12 }]}
+          >
+            You will not be able to access your personal data including your old
+            orders, saved addresses, payment methods etc.
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -268,7 +308,7 @@ const EditProfileScreen = () => {
       )}
 
       <Modal
-        animationType="slide" // Or 'fade'
+        animationType="slide"
         transparent={true}
         visible={isPickerVisible}
         onRequestClose={handlePickerCancel}
@@ -294,7 +334,7 @@ const EditProfileScreen = () => {
               </TouchableOpacity>
             </View>
             <Picker
-              selectedValue={tempAccountType} // Use temp state here
+              selectedValue={tempAccountType}
               onValueChange={(itemValue) => setTempAccountType(itemValue)}
               itemStyle={styles.pickerItem}
               style={styles.pickerModal}
@@ -305,6 +345,57 @@ const EditProfileScreen = () => {
             </Picker>
           </View>
         </TouchableOpacity>
+      </Modal>
+
+      {/* Delete account confirmation modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showDeleteConfirmation}
+        onRequestClose={cancelDeleteAccount}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+              Are you sure you want to delete your account?
+            </Text>
+            <Text style={styles.modalSubText}>
+              You will not be able to access your personal data including your
+              old orders, saved addresses, payment methods etc.
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonCancel]}
+                onPress={cancelDeleteAccount}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonConfirm]}
+                onPress={confirmDeleteAccount}
+              >
+                <Text style={styles.textStyle}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Deletion success modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showDeletionSuccess}
+        onRequestClose={() => setShowDeletionSuccess(false)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.successModalView}>
+            <Ionicons name="checkmark-circle" size={50} color="green" />
+            <Text style={styles.successModalText}>
+              Account successfully deleted!
+            </Text>
+          </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -489,13 +580,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
   settingItemText: {
     fontSize: 16,
     color: "#333",
     fontFamily: "Montserrat_400Regular",
+  },
+  deleteAccount: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
   },
   settingItemIcon: {
     color: "#e91e63",
@@ -515,6 +609,89 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "Montserrat_400Regular",
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontFamily: "Montserrat_400Regular",
+    fontWeight: "bold",
+  },
+  modalSubText: {
+    fontSize: 14,
+    color: "gray",
+    marginBottom: 20,
+    textAlign: "center",
+    fontFamily: "Montserrat_400Regular",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    width: "40%",
+  },
+  buttonCancel: {
+    backgroundColor: "#f0f0f0",
+  },
+  buttonConfirm: {
+    backgroundColor: "#e91e63",
+    color: "white",
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Montserrat_400Regular",
+  },
+  successModalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  successModalText: {
+    textAlign: "center",
+    marginTop: 10,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "green",
     fontFamily: "Montserrat_400Regular",
   },
 });

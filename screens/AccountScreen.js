@@ -31,6 +31,7 @@ const MyProfileScreen = () => {
   const goToEditProfile = () => navigation.navigate("EditProfile");
   const goToManageAddresses = () => navigation.navigate("ManageAddresses");
   const goToPaymentMethods = () => navigation.navigate("PaymentMethods");
+  const goToHelpSupport = () => navigation.navigate("HelpSupport");
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -72,12 +73,6 @@ const MyProfileScreen = () => {
               <Text style={styles.profileName}>Banana Bakery</Text>
               <Text style={styles.accountType}>Account Type</Text>
             </View>
-            <MaterialIcons
-              name="chevron-right"
-              size={25}
-              color="#AAAAAA"
-              style={styles.arrowIcon}
-            />
           </View>
         </TouchableOpacity>
 
@@ -125,7 +120,10 @@ const MyProfileScreen = () => {
               <Text style={styles.actionText}>Payments</Text>
             </TouchableOpacity>
             {/* Help & Support Button - Add navigation if needed */}
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToHelpSupport}
+            >
               <MaterialIcons
                 name="help-outline"
                 size={20}

@@ -15,6 +15,10 @@ import { useNavigation } from "@react-navigation/native";
 const PaymentMethodsScreen = () => {
   const navigation = useNavigation();
 
+  const handleAddNewPaymentMethod = () => {
+    navigation.navigate("AddNewPaymentMethod");
+  };
+
   const savedCards = [
     {
       id: "1",
@@ -52,7 +56,10 @@ const PaymentMethodsScreen = () => {
         <View style={{ width: 34 }} />
       </View>
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={handleAddNewPaymentMethod}
+      >
         <Ionicons name="add" size={20} color="#fff" />
         <Text style={styles.addButtonText}>Add New Payment Method</Text>
       </TouchableOpacity>

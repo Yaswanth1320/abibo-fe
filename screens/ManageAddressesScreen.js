@@ -14,6 +14,10 @@ import { useNavigation } from "@react-navigation/native";
 const ManageAddressesScreen = () => {
   const navigation = useNavigation();
 
+  const handleAddNewAddress = () => {
+    navigation.navigate("AddNewAddress");
+  };
+
   const addresses = [
     {
       id: "1",
@@ -48,7 +52,7 @@ const ManageAddressesScreen = () => {
         <View style={{ width: 34 }} />
       </View>
 
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddNewAddress}>
         <Ionicons name="add" size={20} color="#fff" />
         <Text style={styles.addButtonText}>Add New Address</Text>
       </TouchableOpacity>
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     marginHorizontal: 20,
-    marginVertical: 15, 
+    marginVertical: 15,
   },
   addButtonText: {
     color: "#fff",
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
   },
   actionIcon: {
     marginLeft: 12,
-    padding: 3, 
+    padding: 3,
   },
   addressText: {
     fontSize: 14,
