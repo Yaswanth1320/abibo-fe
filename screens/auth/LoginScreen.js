@@ -44,7 +44,7 @@ const LoginScreen = () => {
 
   const handleForgotPassword = () => {
     console.log("Forgot Password pressed");
-    navigation.navigate("ForgotPassword"); // navigate to ForgotPasswordScreen
+    navigation.replace("ForgotPassword");
   };
 
   const toggleSelection = () => {
@@ -58,10 +58,9 @@ const LoginScreen = () => {
     >
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          {/* Logo and Welcome Text Section */}
           <View style={styles.topSection}>
             <Image
-              source={require("../assets/logo-r.png")}
+              source={require("../../assets/logo-r.png")}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -267,8 +266,8 @@ const styles = StyleSheet.create({
     color: "crimson",
     alignSelf: "flex-end",
     fontFamily: "Montserrat_400Regular",
-    fontSize: 12,
-    marginTop: 5,
+    fontSize: 13,
+    marginTop: 7,
     marginBottom: 8, // Reduced bottom margin
   },
   button: {

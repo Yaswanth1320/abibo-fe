@@ -59,7 +59,7 @@ const OtpLoginScreen = () => {
           {/* Logo and Title */}
           <View style={styles.headerContainer}>
             <Image
-              source={require("../assets/logo-r.png")}
+              source={require("../../assets/logo-r.png")}
               style={styles.logo}
               resizeMode="contain"
             />

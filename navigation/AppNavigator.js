@@ -2,12 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import SplashScreen from "../screens/SplashScreen";
-import LoginScreen from "../screens/LoginScreen";
-import SignupScreen from "../screens/SignupScreen";
-import OtpLoginScreen from "../screens/OtpLoginScreen";
-import TabNavigator from "./TabNavigator"; // Import the TabNavigator
-import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import SplashScreen from "../screens/auth/SplashScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import SignupScreen from "../screens/auth/SignupScreen";
+import OtpLoginScreen from "../screens/auth/OtpLoginScreen";
+import TabNavigator from "./TabNavigator";
+import ForgotPasswordScreen from "../screens/auth/ForgotPasswordScreen";
 import CartScreen from "../screens/CartScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";

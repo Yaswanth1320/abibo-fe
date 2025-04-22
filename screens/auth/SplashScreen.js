@@ -22,7 +22,7 @@ const SplashScreen = ({ navigation }) => {
       style={[styles.container, { width: width, height: height }]}
     >
       <Image
-        source={require("../assets/logo-r.png")}
+        source={require("../../assets/logo-r.png")}
         style={styles.logo}
         resizeMode="contain"
       />
